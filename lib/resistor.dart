@@ -1,9 +1,9 @@
-
 import 'dart:math';
 
+import 'package:resistor/component.dart';
 import 'package:resistor/enums.dart';
 
-class Resistor {
+class Resistor extends Component {
   final List<Digit> digits;
   final Multiplier multiplier;
   final Tolerance tolerance;
@@ -15,7 +15,7 @@ class Resistor {
     Digit? thirdDigit,
     required this.multiplier,
     required this.tolerance,
-  }) : digits = [firstDigit, secondDigit, if (thirdDigit != null) thirdDigit]; //: assert(firstDigit.value != null, 'first digit can not be gold or silver');
+  })  : digits = [firstDigit, secondDigit, if (thirdDigit != null) thirdDigit]; //: assert(firstDigit.value != null, 'first digit can not be gold or silver');
 
   factory Resistor.band4({
     required Digit firstDigit,
@@ -44,29 +44,19 @@ class Resistor {
       thirdDigit: thirdDigit,
       multiplier: multiplier,
       tolerance: tolerance,
-   );
+    );
   }
 
-
-  void calculateResistance() {
-
+  @override
+  double getResistance() {
     double resistance = 0;
-    for (int zaehler = 0; zaehler < digits.length; zaehler++)
-    {
-       resistance = digits[zaehler].value * pow(10, digits.length - zaehler) + resistance;
+    for (int zaehler = 0; zaehler < digits.length; zaehler++) {
+      resistance = digits[zaehler].value * pow(10, digits.length - zaehler -1) + resistance;
     }
     resistance *= multiplier.value;
-
-    print('${resistance} Ohm ± ${tolerance.value}');
+    return resistance;
+    // print('${resistance} Ohm ± ${tolerance.value}');
   }
 
-  static double _calc5Band({
-    required Digit firstDigit,
-    required Digit secondDigit,
-    required Digit thirdDigit,
-    required Multiplier multiplier,
-    required Tolerance tolerance,
-  }) {
-    return (firstDigit.value * 100 + secondDigit.value * 10 + thirdDigit.value) * multiplier.value;
-  }
+
 }
