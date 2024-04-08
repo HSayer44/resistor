@@ -13,6 +13,34 @@ enum Digit {
   const Digit(this.value);
 
   final int value;
+
+  static Digit fromString(String color) {
+    color = color.toLowerCase();
+    switch (color) {
+      case 'black':
+        return Digit.black;
+      case 'brown':
+        return Digit.brown;
+      case 'red':
+        return Digit.red;
+      case 'orange':
+        return Digit.orange;
+      case 'yellow':
+        return Digit.yellow;
+      case 'green':
+        return Digit.green;
+      case 'blue':
+        return Digit.blue;
+      case 'violet':
+        return Digit.violet;
+      case 'grey':
+        return Digit.grey;
+      case 'white':
+        return Digit.white;
+      default:
+        throw Exception('this is not a digit');
+    }
+  }
 }
 
 enum Multiplier {
@@ -29,6 +57,17 @@ enum Multiplier {
   const Multiplier(this.value);
 
   final double value;
+
+  static Multiplier fromString(String color) {
+    color = color.toLowerCase();
+    for (Multiplier multiplier in Multiplier.values) {
+      print(multiplier);
+      if (color == multiplier.name) {
+        return multiplier;
+      }
+    }
+    throw Exception('that is not a multiplier2');
+  }
 }
 
 enum Tolerance {
@@ -43,4 +82,20 @@ enum Tolerance {
   const Tolerance(this.value);
 
   final double value;
+
+  static Tolerance fromString(String color) {
+    color = color.toLowerCase();
+    for (Tolerance tolerance in Tolerance.values) {
+      if (color == tolerance.name) {
+        return tolerance;
+      }
+    }
+    throw Exception('exception');
+  }
+}
+
+extension StringExtension on String {
+  Digit toDigit() {
+    return Digit.fromString(this);
+  }
 }
