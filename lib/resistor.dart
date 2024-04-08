@@ -58,5 +58,10 @@ class Resistor extends Component {
     // print('${resistance} Ohm ± ${tolerance.value}');
   }
 
+  @override
+  double getVoltage() {
+    return 0;
+  }
+
 
 }

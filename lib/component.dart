@@ -1,5 +1,7 @@
 abstract class Component {
   double getResistance();
+
+  double getVoltage();
 }
 
 // if (circuit != null) {

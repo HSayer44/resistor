@@ -2,9 +2,15 @@ import 'package:resistor/circuit.dart';
 import 'package:resistor/enums.dart';
 import 'package:resistor/parallelCircuit.dart';
 import 'package:resistor/resistor.dart';
+import 'package:resistor/voltage_source.dart';
 
 void main(List<String> arguments) {
   // print(arguments);
+  final voltageSource1 = VoltageSource(voltage: 20);
+  final voltageSource2 = VoltageSource(voltage: 10);
+  final voltageSource3 = VoltageSource(voltage: 30);
+
+
   final resistor1 = Resistor.band5(
     firstDigit: Digit.brown,
     secondDigit: Digit.black,
@@ -39,6 +45,15 @@ void main(List<String> arguments) {
   } on Exception catch (e) {
     print(e.toString());
   }
+
+  final circuit = Circuit(components: [voltageSource1, voltageSource2, voltageSource3]);
+  final v = circuit.getVoltage();
+  print(v);
+
+
+  final parallelCircuit = ParallelCircuit(components: [voltageSource1, voltageSource2, voltageSource3]);
+  final pV = parallelCircuit.getVoltage();
+  print(pV);
 
   // resistor.calculateResistance();
 }

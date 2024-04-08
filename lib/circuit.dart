@@ -15,4 +15,13 @@ class Circuit extends Component {
     return sum;
 
   }
+
+  @override
+  double getVoltage() {
+    double sum = 0;
+    for(Component component in components){
+      sum += component.getVoltage();
+    }
+    return sum;
+  }
 }
