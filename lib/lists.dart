@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart' hide Tolerance;
 import 'package:resistor_package/resistor_package.dart';
 
-List<DropdownMenuItem<String>> digitList() {
-  List<DropdownMenuItem<String>> items = [];
+List<DropdownMenuItem<Digit>> digitList() {
+  List<DropdownMenuItem<Digit>> items = [];
   for (Digit d in Digit.values) {
     items.add(
       DropdownMenuItem(
@@ -17,15 +17,15 @@ List<DropdownMenuItem<String>> digitList() {
             ],
           ),
         ),
-        value: d.name,
+        value: d.name.toDigit(),
       ),
     );
   }
   return items;
 }
 
-List<DropdownMenuItem<String>> multiplierList() {
-  List<DropdownMenuItem<String>> items = [];
+List<DropdownMenuItem<Multiplier>> multiplierList() {
+  List<DropdownMenuItem<Multiplier>> items = [];
   for (Multiplier d in Multiplier.values) {
     items.add(
       DropdownMenuItem(
@@ -37,15 +37,15 @@ List<DropdownMenuItem<String>> multiplierList() {
             Text(d.value.toString()),
           ],
         ),
-        value: d.name,
+        value: Multiplier.fromString(d.name),
       ),
     );
   }
   return items;
 }
 
-List<DropdownMenuItem<String>> toleranceList() {
-  List<DropdownMenuItem<String>> items = [];
+List<DropdownMenuItem<Tolerance>> toleranceList() {
+  List<DropdownMenuItem<Tolerance>> items = [];
   for (Tolerance d in Tolerance.values) {
     items.add(
       DropdownMenuItem(
@@ -57,7 +57,7 @@ List<DropdownMenuItem<String>> toleranceList() {
             Text(d.value.toString()),
           ],
         ),
-        value: d.name,
+        value: Tolerance.fromString(d.name),
       ),
     );
   }

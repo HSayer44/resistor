@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Tolerance;
+import 'package:resistor/drop_down_widget.dart';
 import 'package:resistor_package/resistor_package.dart';
 import 'lists.dart';
 
@@ -10,11 +11,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String firstDigit = 'black';
-  String secondDigit = 'black';
-  String thirdDigit = 'black';
-  String multiplier = 'black';
-  String tolerance = 'brown';
+  Digit firstDigit = Digit.black;
+  Digit secondDigit = Digit.black;
+  Digit thirdDigit = Digit.black;
+  Multiplier multiplier = Multiplier.black;
+  Tolerance tolerance = Tolerance.brown;
+
+  final resistorList = [];
 
   bool showThirdDigit = false;
 
@@ -54,49 +57,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Column(
-                      children: [
-                        Text('First Digit'),
-                        DropdownButton(
-                          value: firstDigit,
-                          items: digitList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              firstDigit = newValue!;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text('Second Digit'),
-                        DropdownButton(
-                          value: secondDigit,
-                          items: digitList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              secondDigit = newValue!;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    DropDownWidget<Digit>(
+                        value: firstDigit,
+                        items: digitList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            firstDigit = newValue!;
+                          });
+                        },
+                        text: 'First Digit'),
+                    DropDownWidget<Digit>(
+                        value: secondDigit,
+                        items: digitList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            secondDigit = newValue!;
+                          });
+                        },
+                        text: 'Second Digit'),
                     Visibility(
                       visible: showThirdDigit,
-                      child: Column(
-                        children: [
-                          Text('Third Digit'),
-                          DropdownButton(
-                            value: thirdDigit,
-                            items: digitList(),
-                            onChanged: (newValue) {
-                              setState(() {
-                                thirdDigit = newValue!;
-                              });
-                            },
-                          ),
-                        ],
+                      child: DropDownWidget<Digit>(
+                        value: thirdDigit,
+                        text: 'Third Digit',
+                        items: digitList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            thirdDigit = newValue!;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -106,34 +95,25 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      Text('Multiplier'),
-                      DropdownButton(
-                        value: multiplier,
-                        items: multiplierList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            multiplier = newValue!;
-                          });
-                        },
-                      ),
-                    ],
+                  DropDownWidget<Multiplier>(
+                    value: multiplier,
+                    text: 'Multiplier',
+                    items: multiplierList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        multiplier = newValue!;
+                      });
+                    },
                   ),
-                  Column(
-                    children: [
-                      Text('Tolerance'),
-                      DropdownButton(
-                        borderRadius: BorderRadius.circular(12),
-                        value: tolerance,
-                        items: multiplierList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            tolerance = newValue!;
-                          });
-                        },
-                      ),
-                    ],
+                  DropDownWidget<Tolerance>(
+                    value: tolerance,
+                    text: 'Tolerance',
+                    items: toleranceList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        tolerance = newValue!;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -157,7 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 child: Text('Claculate Resistance'),
-              )
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Add Resistance'),
+              ),
             ],
           ),
         ),
@@ -166,23 +150,42 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String claculateResistance() {
-    Resistor resistor = Resistor.band4(
-      firstDigit: firstDigit.toDigit(),
-      secondDigit: secondDigit.toDigit(),
-      multiplier: Multiplier.fromString(multiplier),
-      tolerance: Tolerance.fromString(tolerance),
+    Resistor resistor4band = Resistor.band4(
+      firstDigit: firstDigit,
+      secondDigit: secondDigit,
+      multiplier: multiplier,
+      tolerance: tolerance,
     );
 
     Resistor resistor5band = Resistor.band5(
-      firstDigit: firstDigit.toDigit(),
-      secondDigit: secondDigit.toDigit(),
-      thirdDigit: thirdDigit.toDigit(),
-      multiplier: Multiplier.fromString(multiplier),
-      tolerance: Tolerance.fromString(tolerance),
+      firstDigit: firstDigit,
+      secondDigit: secondDigit,
+      thirdDigit: thirdDigit,
+      multiplier: multiplier,
+      tolerance: tolerance,
     );
 
-    final resistance = showThirdDigit ? '${resistor5band.getResistance()} Ω' : '${resistor.getResistance()} Ω';
+    final resistance = showThirdDigit ? '${resistor5band.getResistance()} Ω' : '${resistor4band.getResistance()} Ω';
 
     return resistance;
+  }
+
+  void addResistance() {
+    Resistor resistor4band = Resistor.band4(
+      firstDigit: firstDigit,
+      secondDigit: secondDigit,
+      multiplier: multiplier,
+      tolerance: tolerance,
+    );
+
+    Resistor resistor5band = Resistor.band5(
+      firstDigit: firstDigit,
+      secondDigit: secondDigit,
+      thirdDigit: thirdDigit,
+      multiplier: multiplier,
+      tolerance: tolerance,
+    );
+
+    showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
   }
 }
