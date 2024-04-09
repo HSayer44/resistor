@@ -17,13 +17,11 @@ class ParallelCircuit extends Component {
   @override
   double getVoltage() {
     double voltage = 0;
-    List voltageList = [];
+    double currentVoltage = 0;
     for(Component component in components) {
       voltage = component.getVoltage();
-      voltageList.add(voltage);
+      if(voltage > currentVoltage) currentVoltage = voltage;
     }
-    voltageList.sort();
-    voltage = voltageList.last;
-    return voltage;
+    return currentVoltage;
   }
 }
