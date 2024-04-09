@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Tolerance;
 import 'package:resistor/drop_down_widget.dart';
+import 'package:resistor/resitor_config.dart';
 import 'package:resistor_package/resistor_package.dart';
 import 'lists.dart';
 
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Tolerance tolerance = Tolerance.brown;
 
   final List<Resistor> resistorList = [];
-  Resistor? currentResistor = null;
+  Resistor? currentResistor;
 
   bool showThirdDigit = false;
 
@@ -41,91 +42,56 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Center(
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 100),
-                child: CheckboxListTile(
-                  value: showThirdDigit,
-                  title: Text('Five bands'),
-                  contentPadding: EdgeInsets.zero,
-                  onChanged: (value) {
-                    setState(() {
-                      showThirdDigit = value!;
-                    });
-                  },
-                ),
-              ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    DropDownWidget<Digit>(
-                        value: firstDigit,
-                        items: digitList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            firstDigit = newValue!;
-                          });
-                        },
-                        text: 'First Digit'),
-                    DropDownWidget<Digit>(
-                        value: secondDigit,
-                        items: digitList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            secondDigit = newValue!;
-                          });
-                        },
-                        text: 'Second Digit'),
-                    Visibility(
-                      visible: showThirdDigit,
-                      child: DropDownWidget<Digit>(
-                        value: thirdDigit,
-                        text: 'Third Digit',
-                        items: digitList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            thirdDigit = newValue!;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DropDownWidget<Multiplier>(
-                    value: multiplier,
-                    text: 'Multiplier',
-                    items: multiplierList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        multiplier = newValue!;
-                      });
-                    },
-                  ),
-                  DropDownWidget<Tolerance>(
-                    value: tolerance,
-                    text: 'Tolerance',
-                    items: toleranceList(),
-                    onChanged: (newValue) {
-                      setState(() {
-                        tolerance = newValue!;
-                      });
-                    },
-                  ),
-                ],
+              ResistorConfig(
+                firstDigit: firstDigit,
+                secondDigit: secondDigit,
+                thirdDigit: thirdDigit,
+                multiplier: multiplier,
+                tolerance: tolerance,
+                showThirdDigit: showThirdDigit,
+                onChangedShowThirdDigit: (value) {
+                  setState(() {
+                    showThirdDigit = value!;
+                  });
+                },
+                onChangedFirstDigit: (newValue) {
+                  setState(() {
+                    firstDigit = newValue!;
+                  });
+                },
+                onChangedSecondDigit: (newValue) {
+                  setState(() {
+                    secondDigit = newValue!;
+                  });
+                },
+                onChangedThirdDigit: (newValue) {
+                  setState(() {
+                    thirdDigit = newValue!;
+                  });
+                },
+                onChangedMultiplier: (newValue) {
+                  setState(() {
+                    multiplier = newValue!;
+                  });
+                },
+                onChangedTolerance: (newValue) {
+                  setState(() {
+                    tolerance = newValue!;
+                  });
+                },
               ),
               SizedBox(height: 20),
               DropDownWidget<Resistor?>(
                   value: currentResistor,
-                  items: resistorDropDownList(),
+                  items: resistorDropDownList(resistorList),
                   onChanged: (newValue) {
                     setState(() {
                       print(newValue);
                       currentResistor = newValue;
+                      resistanceController.clear();
+                      if (newValue != null) {
+                        updateDropDownsFromResistor(newValue, isFiveBands: newValue.digits.length > 2);
+                      }
                     });
                   },
                   text: 'Resistors'),
@@ -148,7 +114,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     resistanceController.text = resistance;
                   });
                 },
-                child: Text('Claculate Resistance'),
+                child: Text('Calaculate Resistance'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final totlaResistance = calculateAllResistances();
+                  setState(() {
+                    resistanceController.text = totlaResistance;
+                  });
+                },
+                child: Text('Calaculate All Resistances'),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -184,6 +159,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return resistance;
   }
 
+  String calculateAllResistances() {
+    Circuit circuit = Circuit(
+      components: resistorList,
+    );
+    final totalResistance = circuit.getResistance();
+    return '$totalResistance Ω';
+  }
+
   void addResistance() {
     Resistor resistor4band = Resistor.band4(
       firstDigit: firstDigit,
@@ -206,21 +189,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  List<DropdownMenuItem<Resistor>> resistorDropDownList() {
-    List<DropdownMenuItem<Resistor>> items = [];
-    for (int i = 0; i < resistorList.length; i++) {
-      items.add(
-        DropdownMenuItem(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Resistor $i'),
-            ],
-          ),
-          value: resistorList[i],
-        ),
-      );
+
+  void updateDropDownsFromResistor(Resistor? resistor, {required bool isFiveBands}) {
+    if (resistor != null) {
+      setState(() {
+        firstDigit = resistor.digits[0];
+        secondDigit = resistor.digits[1];
+        if (isFiveBands) {
+          thirdDigit = resistor.digits[2];
+        }
+        multiplier = resistor.multiplier;
+        tolerance = resistor.tolerance;
+        showThirdDigit = isFiveBands;
+      });
     }
-    return items;
   }
 }
