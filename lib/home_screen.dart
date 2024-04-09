@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Multiplier multiplier = Multiplier.black;
   Tolerance tolerance = Tolerance.brown;
 
-  final resistorList = [];
+  final List<Resistor> resistorList = [];
 
   bool showThirdDigit = false;
 
@@ -118,6 +118,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 20),
+              DropDownWidget(value: null, items: resistorDropDownList(), onChanged: (newValue) {
+                setState(() {
+                  resistorList.first = newValue!;
+                });
+              }, text: 'Resistors'),
+              SizedBox(height: 20),
               TextField(
                 controller: resistanceController,
                 readOnly: true,
@@ -139,7 +145,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text('Claculate Resistance'),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  addResistance();
+                },
                 child: Text('Add Resistance'),
               ),
             ],
@@ -187,5 +195,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
+    setState(() {
+
+    });
+  }
+
+  List<DropdownMenuItem<Resistor>> resistorDropDownList() {
+    List<DropdownMenuItem<Resistor>> items = [];
+    for (int i = 0; i <= resistorList.length; i++) {
+      items.add(
+        DropdownMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Resistor $i'),
+            ],
+          ),
+          value: null,
+        ),
+      );
+    }
+    return items;
   }
 }
