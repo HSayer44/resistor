@@ -215,7 +215,7 @@
         <entry key="resistor_package">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/git/resistor_package-0680619b8d406566a7cde9a1ef4392b720fc021f//lib" />
+              <option value="$USER_HOME$/.pub-cache/git/resistor_package-2bb78a4a795c54924e7931e97fd71e751bc607bb//lib" />
             </list>
           </value>
         </entry>
@@ -362,7 +362,7 @@
         <entry key="web_socket_channel">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.4/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.5/lib" />
             </list>
           </value>
         </entry>
@@ -383,7 +383,7 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/git/resistor_package-0680619b8d406566a7cde9a1ef4392b720fc021f//lib" />
+      <root url="file://$USER_HOME$/.pub-cache/git/resistor_package-2bb78a4a795c54924e7931e97fd71e751bc607bb//lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-67.0.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/analyzer-6.4.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.4.2/lib" />
@@ -432,7 +432,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/vm_service-14.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/watcher-1.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web-0.5.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.4/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webkit_inspection_protocol-1.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/yaml-3.1.2/lib" />
       <root url="file://$USER_HOME$/flutter/bin/cache/pkg/sky_engine/lib" />

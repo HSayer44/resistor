@@ -18,6 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Tolerance tolerance = Tolerance.brown;
 
   final List<Resistor> resistorList = [];
+  Resistor? currentResistor = null;
 
   bool showThirdDigit = false;
 
@@ -118,11 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              DropDownWidget(value: null, items: resistorDropDownList(), onChanged: (newValue) {
-                setState(() {
-                  resistorList.first = newValue!;
-                });
-              }, text: 'Resistors'),
+              DropDownWidget<Resistor?>(
+                  value: currentResistor,
+                  items: resistorDropDownList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      print(newValue);
+                      currentResistor = newValue;
+                    });
+                  },
+                  text: 'Resistors'),
               SizedBox(height: 20),
               TextField(
                 controller: resistanceController,
@@ -194,15 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
       tolerance: tolerance,
     );
 
-    showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
+    // print(resistorList);
     setState(() {
-
+      showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
     });
   }
 
   List<DropdownMenuItem<Resistor>> resistorDropDownList() {
     List<DropdownMenuItem<Resistor>> items = [];
-    for (int i = 0; i <= resistorList.length; i++) {
+    for (int i = 0; i < resistorList.length; i++) {
       items.add(
         DropdownMenuItem(
           child: Row(
@@ -211,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('Resistor $i'),
             ],
           ),
-          value: null,
+          value: resistorList[i],
         ),
       );
     }
