@@ -81,20 +81,44 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               SizedBox(height: 20),
-              DropDownWidget<Resistor?>(
-                  value: currentResistor,
-                  items: resistorDropDownList(resistorList),
-                  onChanged: (newValue) {
-                    setState(() {
-                      print(newValue);
-                      currentResistor = newValue;
-                      resistanceController.clear();
-                      if (newValue != null) {
-                        updateDropDownsFromResistor(newValue, isFiveBands: newValue.digits.length > 2);
-                      }
-                    });
-                  },
-                  text: 'Resistors'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  DropDownWidget<Resistor?>(
+                      value: currentResistor,
+                      items: resistorDropDownList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          print(newValue);
+                          currentResistor = newValue;
+                          resistanceController.clear();
+                          if (newValue != null) {
+                            updateDropDownsFromResistor(newValue, isFiveBands: newValue.digits.length > 2);
+                          }
+                        });
+                      },
+                      text: 'Resistors'),
+                  if (resistorList.isNotEmpty)
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (resistorList.isNotEmpty && currentResistor != null) {
+                            resistorList.remove(currentResistor);
+                            if (resistorList.isNotEmpty) {
+                              currentResistor = resistorList.last;
+                            } else {
+                              currentResistor = null;
+                            }
+                          } else {
+                            currentResistor = null;
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.delete),
+                    ),
+                ],
+              ),
               SizedBox(height: 20),
               TextField(
                 controller: resistanceController,
@@ -118,9 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  final totlaResistance = calculateAllResistances();
                   setState(() {
-                    resistanceController.text = totlaResistance;
+                    resistanceController.text = calculateAllResistances();
                   });
                 },
                 child: Text('Calaculate All Resistances'),
@@ -185,10 +208,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // print(resistorList);
     setState(() {
-      showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
+      if (showThirdDigit) {
+        resistorList.add(resistor5band);
+        currentResistor = resistor5band;
+      } else {
+        resistorList.add(resistor4band);
+        currentResistor = resistor4band;
+      }
+      // showThirdDigit ? resistorList.add(resistor5band) : resistorList.add(resistor4band);
     });
   }
-
 
   void updateDropDownsFromResistor(Resistor? resistor, {required bool isFiveBands}) {
     if (resistor != null) {
@@ -203,5 +232,18 @@ class _HomeScreenState extends State<HomeScreen> {
         showThirdDigit = isFiveBands;
       });
     }
+  }
+
+  List<DropdownMenuItem<Resistor>> resistorDropDownList() {
+    List<DropdownMenuItem<Resistor>> items = [];
+    for (int i = 0; i < resistorList.length; i++) {
+      items.add(
+        DropdownMenuItem(
+          child: Text('Resistor $i'),
+          value: resistorList[i],
+        ),
+      );
+    }
+    return items;
   }
 }

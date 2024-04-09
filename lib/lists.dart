@@ -64,21 +64,4 @@ List<DropdownMenuItem<Tolerance>> toleranceList() {
   return items;
 }
 
-List<DropdownMenuItem<Resistor>> resistorDropDownList(List<Resistor> resistorList) {
-  List<DropdownMenuItem<Resistor>> items = [];
-  for (int i = 0; i < resistorList.length; i++) {
-    items.add(
-      DropdownMenuItem(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Resistor $i'),
-            IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-          ],
-        ),
-        value: resistorList[i],
-      ),
-    );
-  }
-  return items;
-}
+
