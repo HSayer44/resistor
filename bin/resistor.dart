@@ -1,9 +1,4 @@
-import 'package:resistor/circuit.dart';
-import 'package:resistor/enums.dart';
-import 'package:resistor/parallelCircuit.dart';
-import 'package:resistor/resistor.dart';
-import 'package:resistor/voltage_source.dart';
-
+import 'package:resistor_package/resistor_package.dart';
 void main(List<String> arguments) {
   // print(arguments);
   final voltageSource1 = VoltageSource(voltage: 20);
